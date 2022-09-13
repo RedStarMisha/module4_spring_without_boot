@@ -2,7 +2,7 @@ package ru.practicum.urlretriever;
 
 import java.time.Instant;
 
-public interface UrlMetadata {
+public interface UrlMetaDto {
     String getNormalUrl();
     String getResolvedUrl();
     String getMimeType();

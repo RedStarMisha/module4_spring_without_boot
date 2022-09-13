@@ -6,9 +6,11 @@ import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.stereotype.Component;
 import org.springframework.util.MimeType;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -16,9 +18,10 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Instant;
 
+@Component
 public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
     @Override
-    public UrlMetadata retrieve(String urlString) throws ItemRetrieverException {
+    public UrlMetaDto retrieve(String urlString) throws ItemRetrieverException {
         final URI uri;
         try {
             uri = new URI(urlString);
@@ -35,7 +38,7 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
 
         MediaType mediaType = MediaType.parseMediaType(contentType);
 
-        final UrlMetadataImpl result;
+        final UrlMetaDtoImpl result;
 
         if (mediaType.isCompatibleWith(MimeType.valueOf("text/*"))) {
             result = handleText(resp.uri());
@@ -63,27 +66,21 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
         HttpClient client = HttpClient.newBuilder()
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
-        HttpRequest request;
-        switch (method){
-            case "HEAD":
-                request = HttpRequest.newBuilder()
-                        .uri(url)
-                        .method(method, HttpRequest.BodyPublishers.noBody())
-                        .version(HttpClient.Version.HTTP_1_1)
-                        .build();
-            case "GET":
-
-        }
-        HttpRequest requestForSave = HttpRequest.newBuilder()
-                .method
-                .POST(HttpRequest.BodyPublishers.ofString(data))
-                .uri(postUri)
+        HttpRequest request = HttpRequest.newBuilder()
+                .method(method, HttpRequest.BodyPublishers.noBody())
+                .uri(url)
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
-        HttpResponse<String> response = client.send(requestForSave , HttpResponse.BodyHandlers.ofString());
+        try {
+            return client.send(request, responseBodyHandler);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    private UrlMetadataImpl handleText(URI url) {
+    private UrlMetaDtoImpl handleText(URI url) {
         //заполняем поля для случая, когда страница содержит текст (в том числе html)
         // Отправим get-запрос, чтобы получить содержимое
         HttpResponse<String> resp = connect(url, "GET", HttpResponse.BodyHandlers.ofString());
@@ -98,26 +95,26 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
 
         // добавляем полученные данные в ответ. В том числе находим заголовок
         // полученной страницы.
-        return UrlMetadataImpl.builder()
+        return UrlMetaDtoImpl.builder()
                 .title(doc.title())
                 .hasImage(!imgElements.isEmpty())
                 .hasVideo(!videoElements.isEmpty())
                 .build();
     }
 
-    private UrlMetadataImpl handleVideo(URI url) {
+    private UrlMetaDtoImpl handleVideo(URI url) {
         //заполняем поля для случая, когда страница содержит видео
         String name = new File(url).getName();
-        return UrlMetadataImpl.builder()
+        return UrlMetaDtoImpl.builder()
                 .title(name)
                 .hasVideo(true)
                 .build();
     }
 
-    private UrlMetadataImpl handleImage(URI url) {
+    private UrlMetaDtoImpl handleImage(URI url) {
         //заполняем поля для случая, когда страница содержит изображение
         String name = new File(url).getName();
-        return UrlMetadataImpl.builder()
+        return UrlMetaDtoImpl.builder()
                 .title(name)
                 .hasImage(true)
                 .build();

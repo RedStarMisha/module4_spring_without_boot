@@ -24,6 +24,7 @@ public class ItemController {
 
     @PostMapping
     public ItemDto add(@RequestHeader("X-Later-User-Id") Long userId, @RequestBody ItemDto item) {
+        System.out.println(item);
         return itemService.addNewItem(userId, item);
     }
 

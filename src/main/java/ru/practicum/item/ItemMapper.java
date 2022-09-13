@@ -2,6 +2,7 @@ package ru.practicum.item;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import ru.practicum.urlretriever.UrlMetaDto;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -24,6 +25,16 @@ final class ItemMapper {
                 item.getUserId(),
                 item.getUrl(),
                 new HashSet<>(item.getTags())
+        );
+    }
+
+    public static ItemDto mapToItemDto(Item item, UrlMetaDto urlMetaDto) {
+        return new ItemDto(
+                item.getId(),
+                item.getUserId(),
+                item.getUrl(),
+                new HashSet<>(item.getTags()),
+                urlMetaDto
         );
     }
 

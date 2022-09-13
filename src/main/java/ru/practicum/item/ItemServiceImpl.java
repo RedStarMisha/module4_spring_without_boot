@@ -4,6 +4,8 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.urlretriever.UrlMetaDto;
+import ru.practicum.urlretriever.service.UrlMetaService;
 
 import java.util.List;
 import java.util.Set;
@@ -13,6 +15,8 @@ import java.util.Set;
 @RequiredArgsConstructor
 class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
+
+    private final UrlMetaService urlMetaService;
 
     @Override
     public List<ItemDto> getItems(long userId) {
@@ -24,6 +28,7 @@ class ItemServiceImpl implements ItemService {
     @Override
     public ItemDto addNewItem(long userId, ItemDto itemDto) {
         Item item = repository.save(ItemMapper.mapToItem(itemDto, userId));
+        UrlMetaDto urlMetaDto = urlMetaService.saveNewUrlMeta(item);
         return ItemMapper.mapToItemDto(item);
     }
 

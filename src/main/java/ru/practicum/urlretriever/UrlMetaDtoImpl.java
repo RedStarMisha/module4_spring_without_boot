@@ -1,6 +1,7 @@
 package ru.practicum.urlretriever;
 
 import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Value;
 
 import java.time.Instant;
@@ -8,7 +9,7 @@ import java.time.Instant;
 
 @Builder(toBuilder = true)
 @Value
-public class UrlMetadataImpl implements UrlMetadata {
+public class UrlMetaDtoImpl implements UrlMetaDto {
 
     String normalUrl;
     String resolvedUrl;
