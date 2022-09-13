@@ -1,5 +1,5 @@
 package ru.practicum.urlretriever;
 
 public interface UrlMetadataRetriever {
-    UrlMetadata retrieve(String urlString);
+    UrlMetadata retrieve(String urlString) throws ItemRetrieverException;
 }
