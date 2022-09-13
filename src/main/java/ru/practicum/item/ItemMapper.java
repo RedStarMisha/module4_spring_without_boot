@@ -4,10 +4,7 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import ru.practicum.urlretriever.UrlMetaDto;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 final class ItemMapper {
@@ -24,7 +21,7 @@ final class ItemMapper {
                 item.getId(),
                 item.getUserId(),
                 item.getUrl(),
-                new HashSet<>(item.getTags())
+                item.getTags() != null ? new HashSet<>(item.getTags()) : Collections.emptySet()
         );
     }
 

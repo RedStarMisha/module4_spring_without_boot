@@ -4,6 +4,7 @@ package ru.practicum.urlretriever;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
@@ -16,10 +17,14 @@ import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.time.Duration;
 import java.time.Instant;
 
 @Component
 public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
+
+//    @Value("${cl.timeout}")
+//    private String timeout;
     @Override
     public UrlMetaDto retrieve(String urlString) throws ItemRetrieverException {
         final URI uri;
@@ -31,6 +36,7 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
         }
         //HttpResponse.BodyHandlers.discarding() обработка запроса без тела
         HttpResponse<Void> resp = connect(uri, "HEAD", HttpResponse.BodyHandlers.discarding());
+        System.out.println(resp);
 
         String contentType = resp.headers()
                 .firstValue(HttpHeaders.CONTENT_TYPE)
@@ -64,6 +70,8 @@ public class UrlMetadataRetrieverImpl implements UrlMetadataRetriever {
                                         HttpResponse.BodyHandler<T> responseBodyHandler) {
         //делаем запрос к данному url
         HttpClient client = HttpClient.newBuilder()
+                .followRedirects(HttpClient.Redirect.ALWAYS)
+                .connectTimeout(Duration.ofSeconds(1))
                 .version(HttpClient.Version.HTTP_1_1)
                 .build();
         HttpRequest request = HttpRequest.newBuilder()
