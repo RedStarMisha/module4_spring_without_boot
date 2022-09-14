@@ -30,7 +30,7 @@ final class ItemMapper {
                 item.getId(),
                 item.getUserId(),
                 item.getUrl(),
-                new HashSet<>(item.getTags()),
+                item.getTags() != null ? new HashSet<>(item.getTags()) : Collections.emptySet(),
                 urlMetaDto
         );
     }

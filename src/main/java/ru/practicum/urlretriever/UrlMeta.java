@@ -30,7 +30,7 @@ public class UrlMeta {
     private boolean video;
 
     @Column(name = "resolved")
-    private Instant dateResolved;
+    private Instant dateResolved = Instant.now();
 
     @OneToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id")

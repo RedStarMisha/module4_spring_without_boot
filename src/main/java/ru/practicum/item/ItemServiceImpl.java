@@ -8,6 +8,7 @@ import ru.practicum.urlretriever.UrlMetaDto;
 import ru.practicum.urlretriever.service.UrlMetaService;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -27,9 +28,19 @@ class ItemServiceImpl implements ItemService {
     @Transactional
     @Override
     public ItemDto addNewItem(long userId, ItemDto itemDto) {
-        Item item = repository.save(ItemMapper.mapToItem(itemDto, userId));
-        UrlMetaDto urlMetaDto = urlMetaService.saveNewUrlMeta(item);
-        return ItemMapper.mapToItemDto(item);
+        Optional<Item> maybeExistItem = repository.findByUserIdAndUrl(userId, itemDto.getUrl());
+        Item item;
+        UrlMetaDto urlMetaDto;
+        if (maybeExistItem.isEmpty()) {
+            item = repository.save(ItemMapper.mapToItem(itemDto, userId));
+            urlMetaDto = urlMetaService.saveNewUrlMeta(item);
+        } else {
+            item = maybeExistItem.get();
+            item.getTags().addAll(itemDto.getTags());
+            repository.save(item);
+            urlMetaDto = urlMetaService.findByItemId(item);
+        }
+        return ItemMapper.mapToItemDto(item, urlMetaDto);
     }
 
     @Transactional
@@ -50,5 +61,9 @@ class ItemServiceImpl implements ItemService {
         BooleanExpression byAnyTag = QItem.item.tags.any().in(tags);
         Iterable<Item> foundItems = repository.findAll(byUserId.and(byAnyTag));
         return ItemMapper.mapToItemDto(foundItems);
+    }
+
+    public List<ItemDto> getItems(GetItemRequest req) {
+
     }
 }

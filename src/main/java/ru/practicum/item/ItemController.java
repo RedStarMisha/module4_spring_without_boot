@@ -22,6 +22,17 @@ public class ItemController {
         }
     }
 
+    @GetMapping
+    public List<ItemDto> get(@RequestHeader("X-Later-User-Id") long userId,
+                             @RequestParam(defaultValue = "unread") String state,
+                             @RequestParam(defaultValue = "all") String contentType,
+                             @RequestParam(defaultValue = "newest") String sort,
+                             @RequestParam(defaultValue = "10") int limit,
+                             @RequestParam(required = false) List<String> tags) {
+
+        return itemService.getItems(GetItemRequest.of(userId, state, contentType, sort, limit, tags));
+    }
+
     @PostMapping
     public ItemDto add(@RequestHeader("X-Later-User-Id") Long userId, @RequestBody ItemDto item) {
         System.out.println(item);

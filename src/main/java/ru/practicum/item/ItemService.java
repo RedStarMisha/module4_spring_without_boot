@@ -16,4 +16,6 @@ interface ItemService {
 
     @Transactional(readOnly = true)
     List<ItemDto> getItems(long userId, Set<String> tags);
+
+    List<ItemDto> getItems(GetItemRequest req);
 }
