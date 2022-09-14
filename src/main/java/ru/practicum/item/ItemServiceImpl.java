@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.urlretriever.QUrlMeta;
 import ru.practicum.urlretriever.UrlMetaDto;
 import ru.practicum.urlretriever.service.UrlMetaService;
 
@@ -40,6 +41,7 @@ class ItemServiceImpl implements ItemService {
             repository.save(item);
             urlMetaDto = urlMetaService.findByItemId(item);
         }
+        repository.
         return ItemMapper.mapToItemDto(item, urlMetaDto);
     }
 
@@ -64,6 +66,9 @@ class ItemServiceImpl implements ItemService {
     }
 
     public List<ItemDto> getItems(GetItemRequest req) {
+        QUrlMeta urlMeta = QUrlMeta.urlMeta;
+        GetItemRequest.ResponseParam param = req.getFindParameter(urlMeta);
+        return urlMetaService.findItemByParameters(param.getBooleanExpression(), param.getPageable());
 
     }
 }

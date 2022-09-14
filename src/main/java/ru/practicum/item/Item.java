@@ -28,6 +28,9 @@ public class Item {
     @Column(name="name")
     private Set<String> tags = new HashSet<>();
 
+    @Column(name = "unread")
+    private Boolean unread;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

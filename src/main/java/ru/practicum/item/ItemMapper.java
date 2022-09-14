@@ -7,7 +7,7 @@ import ru.practicum.urlretriever.UrlMetaDto;
 import java.util.*;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
-final class ItemMapper {
+public final class ItemMapper {
     public static Item mapToItem(ItemDto itemDto, long userId) {
         Item item = new Item();
         item.setUserId(userId);

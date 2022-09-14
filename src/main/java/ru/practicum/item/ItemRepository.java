@@ -30,4 +30,5 @@ interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom
     List<ItemCountByUser> countByUserRegistered(LocalDate dateFrom, LocalDate dateTo);
 
     void deleteByUserIdAndId(long userId, long itemId);
+
 }

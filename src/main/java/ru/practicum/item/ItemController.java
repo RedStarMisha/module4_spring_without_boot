@@ -22,8 +22,8 @@ public class ItemController {
         }
     }
 
-    @GetMapping
-    public List<ItemDto> get(@RequestHeader("X-Later-User-Id") long userId,
+    @GetMapping("/sort")
+    public List<ItemDto> getSortedItems(@RequestHeader("X-Later-User-Id") long userId,
                              @RequestParam(defaultValue = "unread") String state,
                              @RequestParam(defaultValue = "all") String contentType,
                              @RequestParam(defaultValue = "newest") String sort,
