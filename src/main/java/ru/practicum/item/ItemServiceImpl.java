@@ -11,9 +11,10 @@ import ru.practicum.urlretriever.service.UrlMetaService;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional(readOnly = true)
+//@Transactional(readOnly = true)
 @RequiredArgsConstructor
 class ItemServiceImpl implements ItemService {
     private final ItemRepository repository;
@@ -21,9 +22,11 @@ class ItemServiceImpl implements ItemService {
     private final UrlMetaService urlMetaService;
 
     @Override
+    @Transactional
     public List<ItemDto> getItems(long userId) {
         List<Item> userItems = repository.findByUserId(userId);
-        return ItemMapper.mapToItemDto(userItems);
+        return userItems.stream().peek(item -> item.setUnread(false)).peek(repository::save).map(item ->
+                ItemMapper.mapToItemDto(item, urlMetaService.findByItemId(item))).collect(Collectors.toList());
     }
 
     @Transactional
@@ -41,7 +44,6 @@ class ItemServiceImpl implements ItemService {
             repository.save(item);
             urlMetaDto = urlMetaService.findByItemId(item);
         }
-        repository.
         return ItemMapper.mapToItemDto(item, urlMetaDto);
     }
 
@@ -65,6 +67,7 @@ class ItemServiceImpl implements ItemService {
         return ItemMapper.mapToItemDto(foundItems);
     }
 
+    @Transactional
     public List<ItemDto> getItems(GetItemRequest req) {
         QUrlMeta urlMeta = QUrlMeta.urlMeta;
         GetItemRequest.ResponseParam param = req.getFindParameter(urlMeta);

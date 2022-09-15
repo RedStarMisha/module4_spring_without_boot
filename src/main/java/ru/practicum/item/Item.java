@@ -29,7 +29,7 @@ public class Item {
     private Set<String> tags = new HashSet<>();
 
     @Column(name = "unread")
-    private Boolean unread;
+    private Boolean unread = true;
 
     @Override
     public boolean equals(Object o) {

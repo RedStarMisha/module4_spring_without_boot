@@ -56,8 +56,6 @@ public class GetItemRequest {
 
         Sort sort = makeSortParameter(this.sorted);
         PageRequest pageRequest = PageRequest.of(0, this.limit, sort);
-        ResponseParam responseParam = new ResponseParam(howFind, pageRequest);
-
 
         return new ResponseParam(howFind, pageRequest);
     }
@@ -65,9 +63,9 @@ public class GetItemRequest {
     private Sort makeSortParameter(Sorted sorted) {
         switch (sorted) {
             case NEWEST:
-                return Sort.by("resolved").descending();
+                return Sort.by("dateResolved").descending();
             case OLDEST:
-                return Sort.by("resolved").ascending();
+                return Sort.by("dateResolved").ascending();
             case SITE:
                 return Sort.by("url").ascending();
             case TITLE:

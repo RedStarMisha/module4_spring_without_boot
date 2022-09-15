@@ -23,6 +23,8 @@ interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom
             "order by count(it.id) desc")
     List<ItemCountByUser> countItemsByUser(String urlPart);
 
+
+
     @Query(value = "select it.user_id, count(it.id) as count "+
             "from items as it left join users as us on it.user_id = us.id "+
             "where (cast(us.registration_date as date)) between ?1 and ?2 "+

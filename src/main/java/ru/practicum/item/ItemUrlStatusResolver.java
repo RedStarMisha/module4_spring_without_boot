@@ -31,26 +31,26 @@ public class ItemUrlStatusResolver implements ItemUrlStatusProvider {
         return urlStatusCache.computeIfAbsent(itemId, __ -> HttpStatus.NOT_FOUND);
     }
 
-    public HttpStatus getStatus(String url){
-        HttpStatus status;
-        try {
-            RequestEntity<byte[]> request = new RequestEntity<>(HttpMethod.GET, new URI(url));
-            ResponseEntity<byte[]> response = restTemplate.exchange(request, byte[].class);
-            status = response.getStatusCode();
-        } catch (Exception e){
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-        return status;
-    }
-
-    public void checkup(){
-        itemRepository.findAll().forEach(item ->
-                urlStatusCache.put(item.getId(), getStatus(item.getUrl()))
-        );
-    }
-
-    @PostConstruct
-    public void init(){
-        checkup();
-    }
+//    public HttpStatus getStatus(String url){
+//        HttpStatus status;
+//        try {
+//            RequestEntity<byte[]> request = new RequestEntity<>(HttpMethod.GET, new URI(url));
+//            ResponseEntity<byte[]> response = restTemplate.exchange(request, byte[].class);
+//            status = response.getStatusCode();
+//        } catch (Exception e){
+//            status = HttpStatus.INTERNAL_SERVER_ERROR;
+//        }
+//        return status;
+//    }
+//
+//    public void checkup(){
+//        itemRepository.findAll().forEach(item ->
+//                urlStatusCache.put(item.getId(), getStatus(item.getUrl()))
+//        );
+//    }
+//
+//    @PostConstruct
+//    public void init(){
+//        checkup();
+//    }
 }
