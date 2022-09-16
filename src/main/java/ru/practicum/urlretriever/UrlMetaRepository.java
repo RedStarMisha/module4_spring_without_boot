@@ -14,7 +14,6 @@ public interface UrlMetaRepository extends JpaRepository<UrlMeta, Long>, Queryds
 
     UrlMeta findByItem_Id(long id);
 
-
     @Modifying
     @Query("update UrlMeta u set u=?2 where u.id=?1")
     UrlMeta updateUrlMeta(long urlMetaId, UrlMeta urlMeta);

@@ -41,6 +41,7 @@ public class UrlMetaServiceImpl implements UrlMetaService {
 
     @Override
     public List<ItemDto> findItemByParameters(BooleanExpression booleanExpression, Pageable pageable) {
+        repository.
         return repository.findAll(booleanExpression, pageable).stream().map(urlMeta ->
                 ItemMapper.mapToItemDto(urlMeta.getItem())).collect(Collectors.toList());
     }
