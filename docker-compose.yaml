@@ -28,5 +28,5 @@ services:
       - DB_NAME=later
       - POSTGRES_USER=kitty
       - POSTGRES_PASSWORD=purrrrrr
-      - DB_HOST=localhost
+      - DB_HOST=db
       - DB_PORT=5432

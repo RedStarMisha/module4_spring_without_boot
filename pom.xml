@@ -192,6 +192,19 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.4</version>
+            </plugin>
+            <plugin>
+                <groupId> org.apache.maven.plugins </groupId>
+                <artifactId> maven-jar-plugin </artifactId>
+                <version> 3.1.1 </version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass> ru.practicum.LaterApplication </mainClass >
+                        </manifest>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>
